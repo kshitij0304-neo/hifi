@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HIFINFT</title>
+  <link rel="stylesheet" href="style.css" />
+
+</head>
+<body>
+  <canvas id="bgCanvas"></canvas>
+
+  <div class="loading-screen">
+    <div class="loader">Loading...</div>
+  </div>
+
+  <header class="navbar">
+    <h1>HIFINFT</h1>
+    <button id="connectWallet">Connect Wallet</button>
+  </header>
+
+  <section class="hero">
+    <h2>Explore the Future of Digital Art</h2>
+    <p>Mint and trade NFTs with a cosmic experience</p>
+    <button id="mintButton">Mint NFT</button>
+  </section>
+
+  <section class="slider">
+    <div class="card-container">
+      <div class="card"><img src="assets/nft/1.png" /></div>
+      <div class="card"><img src="assets/nft/2.png" /></div>
+      <div class="card"><img src="assets/nft/3.png" /></div>
+    </div>
+  </section>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r148/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="background.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
