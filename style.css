@@ -1,124 +1,180 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+/* Custom CSS for HIFINFT Website */
+
+/* General Body Styling */
+body {
+    font-family: 'Inter', sans-serif;
+    /* Ensure smooth scrolling behavior */
+    scroll-behavior: smooth;
+    /* Hide horizontal scrollbar, handled by responsiveness */
+    overflow-x: hidden;
 }
 
-html, body {
-  font-family: 'Segoe UI', sans-serif;
-  overflow-x: hidden;
-  color: white;
-  background-color: black;
-  height: 100%;
+/* Three.js Canvas to ensure it covers the background */
+#three-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -10; /* Ensures it stays behind all content */
+    display: block; /* Remove any default inline-block spacing */
 }
 
-canvas#bgCanvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: -1;
+/* Header Specific Styles */
+header {
+    /* Add a subtle border bottom for separation */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  padding: 1rem 2rem;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(10px);
-  position: sticky;
-  top: 0;
-  z-index: 100;
+/* Mobile Menu Overlay */
+#mobileMenu {
+    /* Initial state: off-screen */
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
 }
 
-.navbar h1 {
-  font-size: 2rem;
+#mobileMenu.active {
+    /* Active state: on-screen */
+    transform: translateX(0);
 }
 
-.navbar button {
-  background: #7f00ff;
-  color: white;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 8px;
-  cursor: pointer;
+/* Hero Section Specifics */
+.hero-title {
+    /* Text shadow for better readability against the dynamic background */
+    text-shadow: 0 0 15px rgba(147, 51, 234, 0.6), 0 0 30px rgba(236, 72, 153, 0.4);
 }
 
-.hero {
-  text-align: center;
-  padding: 10vh 2rem;
+/* Section Backgrounds */
+section {
+    /* Add padding and rounded corners to sections for a card-like effect */
+    padding: 5rem 1.5rem; /* Responsive padding */
+    margin-bottom: 5rem; /* Space between sections */
+    border-radius: 1.5rem; /* Large rounded corners */
+    /* Subtle border for definition */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    /* Ensure content is readable over the background */
+    position: relative;
+    z-index: 1;
 }
 
-.hero h2 {
-  font-size: 3rem;
+/* Specific section adjustments */
+#about, #collection, #roadmap, #contact {
+    /* Adjust max-width for larger screens */
+    max-width: 72rem; /* Equivalent to max-w-6xl */
+    margin-left: auto;
+    margin-right: auto;
 }
 
-.hero button {
-  margin-top: 2rem;
-  background: #ff0080;
-  border: none;
-  padding: 0.8rem 2rem;
-  font-size: 1.1rem;
-  border-radius: 10px;
-  cursor: pointer;
+/* Animated Cards (Collection Section) */
+.nft-card {
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    border: 1px solid rgba(128, 90, 213, 0.3); /* Purple border */
 }
 
-.slider {
-  display: flex;
-  justify-content: center;
-  overflow-x: auto;
-  padding: 4rem 2rem;
+.nft-card:hover {
+    transform: translateY(-8px) scale(1.02); /* Lift and slightly enlarge on hover */
+    box-shadow: 0 15px 30px rgba(147, 51, 234, 0.4); /* Enhanced shadow */
 }
 
-.card-container {
-  display: flex;
-  gap: 2rem;
+.nft-card img {
+    border-bottom: 1px solid rgba(128, 90, 213, 0.2); /* Separator for image */
 }
 
-.card {
-  width: 250px;
-  height: 350px;
-  border-radius: 15px;
-  overflow: hidden;
-  background: #1a1a1a;
-  box-shadow: 0 0 15px #7f00ff80;
-  transform: scale(1);
-  transition: transform 0.3s;
+/* Roadmap Section Specifics */
+.roadmap-item {
+    /* Ensure items are centered on small screens */
+    text-align: center;
 }
 
-.card:hover {
-  transform: scale(1.05);
+@media (min-width: 768px) { /* md breakpoint */
+    .roadmap-item:nth-child(even) {
+        /* For even items, reverse the order on medium and larger screens */
+        flex-direction: row-reverse;
+    }
+    .roadmap-item:nth-child(even) > div:first-child {
+        /* Adjust text alignment for reversed items */
+        text-align: left;
+    }
+    .roadmap-item:nth-child(odd) > div:first-child {
+        /* Adjust text alignment for odd items */
+        text-align: right;
+    }
 }
 
-.card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+/* Contact Form Inputs */
+input, textarea {
+    /* Add a subtle glow on focus */
+    box-shadow: 0 0 0 0 rgba(147, 51, 234, 0);
+    transition: box-shadow 0.3s ease-in-out;
 }
 
-.loading-screen {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  transition: opacity 1s;
+input:focus, textarea:focus {
+    box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.5); /* Purple glow */
 }
 
-.loader {
-  color: white;
-  font-size: 1.5rem;
+/* Smooth scroll for anchor links */
+html {
+    scroll-behavior: smooth;
 }
 
-@media (max-width: 768px) {
-  .hero h2 {
-    font-size: 2rem;
-  }
+/* Responsive adjustments for smaller screens */
+@media (max-width: 767px) { /* Small screens (mobile) */
+    .hero-title {
+        font-size: 3rem; /* Smaller font size for hero title */
+    }
 
-  .card {
-    width: 200px;
-    height: 300px;
-  }
+    .hero-subtitle {
+        font-size: 1rem; /* Smaller font size for hero subtitle */
+    }
+
+    h2 {
+        font-size: 2.5rem; /* Smaller section titles */
+    }
+
+    .roadmap-item {
+        flex-direction: column; /* Stack roadmap items vertically */
+        align-items: center; /* Center align items */
+        text-align: center;
+    }
+
+    .roadmap-item > div {
+        width: 100%; /* Full width for roadmap item content */
+    }
+
+    .roadmap-item > div:first-child,
+    .roadmap-item:nth-child(even) > div:first-child {
+        text-align: center; /* Center text for all roadmap content on mobile */
+    }
+
+    .roadmap-item .w-8.h-8 {
+        margin: 1rem 0; /* Add vertical margin for roadmap circles */
+    }
+
+    .roadmap-item .md\:w-5\/12 {
+        width: 100%; /* Ensure full width on mobile */
+    }
+
+    .roadmap-item .md\:w-1\/12 {
+        width: auto; /* Auto width for the circle container */
+    }
+
+    .roadmap-item .hidden.md\:block {
+        display: none; /* Hide empty divs on mobile */
+    }
+
+    .roadmap-item > div:nth-child(odd) {
+        order: 1; /* Ensure content comes before circle on mobile */
+    }
+
+    .roadmap-item > div:nth-child(even) {
+        order: 2; /* Ensure circle comes after content on mobile */
+    }
+
+    .roadmap-item:nth-child(even) > div:first-child {
+        order: 2; /* Adjust order for even items on mobile */
+    }
+
+    .roadmap-item:nth-child(even) > div:last-child {
+        order: 1; /* Adjust order for even items on mobile */
+    }
 }
