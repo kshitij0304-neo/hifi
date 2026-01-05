@@ -1,41 +1,265 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>HIFINFT</title>
-  <link rel="stylesheet" href="style.css" />
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HIFINFT - Prompt Engineering</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts - Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* Apply Inter font globally */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
 </head>
-<body>
-  <canvas id="bgCanvas"></canvas>
+<body class="bg-black text-white overflow-x-hidden">
+    <!-- Three.js Canvas for Background -->
+    <canvas id="three-bg" class="fixed top-0 left-0 w-full h-full -z-10"></canvas>
 
-  <div class="loading-screen">
-    <div class="loader">Loading...</div>
-  </div>
+    <!-- Header -->
+    <header class="fixed top-0 left-0 w-full z-50 py-4 px-6 md:px-12 flex justify-between items-center bg-black bg-opacity-50 backdrop-blur-sm">
+        <div class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">HIFINFT</div>
+        <nav class="hidden md:flex space-x-8">
+            <a href="#home" class="text-white hover:text-purple-400 transition-colors duration-300">Home</a>
+            <a href="#about" class="text-white hover:text-purple-400 transition-colors duration-300">About</a>
+            <a href="#collection" class="text-white hover:text-purple-400 transition-colors duration-300">Collection</a>
+            <a href="#roadmap" class="text-white hover:text-purple-400 transition-colors duration-300">Roadmap</a>
+            <a href="#contact" class="text-white hover:text-purple-400 transition-colors duration-300">Contact</a>
+        </nav>
+        <button id="connectWalletBtn" class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold py-2 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105">
+            Connect Wallet
+        </button>
+        <!-- Mobile Menu Button -->
+        <button id="mobileMenuBtn" class="md:hidden text-white text-2xl focus:outline-none">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
 
-  <header class="navbar">
-    <h1>HIFINFT</h1>
-    <button id="connectWallet">Connect Wallet</button>
-  </header>
+    <!-- Mobile Navigation Menu -->
+    <nav id="mobileMenu" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-95 z-40 flex flex-col items-center justify-center space-y-8 transform -translate-x-full transition-transform duration-300 ease-in-out md:hidden">
+        <button id="closeMobileMenuBtn" class="absolute top-6 right-6 text-white text-3xl focus:outline-none">
+            <i class="fas fa-times"></i>
+        </button>
+        <a href="#home" class="text-white text-3xl hover:text-purple-400 transition-colors duration-300" onclick="document.getElementById('mobileMenu').classList.add('-translate-x-full')">Home</a>
+        <a href="#about" class="text-white text-3xl hover:text-purple-400 transition-colors duration-300" onclick="document.getElementById('mobileMenu').classList.add('-translate-x-full')">About</a>
+        <a href="#collection" class="text-white text-3xl hover:text-purple-400 transition-colors duration-300" onclick="document.getElementById('mobileMenu').classList.add('-translate-x-full')">Collection</a>
+        <a href="#roadmap" class="text-white text-3xl hover:text-purple-400 transition-colors duration-300" onclick="document.getElementById('mobileMenu').classList.add('-translate-x-full')">Roadmap</a>
+        <a href="#contact" class="text-white text-3xl hover:text-purple-400 transition-colors duration-300" onclick="document.getElementById('mobileMenu').classList.add('-translate-x-full')">Contact</a>
+    </nav>
 
-  <section class="hero">
-    <h2>Explore the Future of Digital Art</h2>
-    <p>Mint and trade NFTs with a cosmic experience</p>
-    <button id="mintButton">Mint NFT</button>
-  </section>
+    <!-- Main Content -->
+    <main class="relative z-10">
+        <!-- Hero Section -->
+        <section id="home" class="min-h-screen flex flex-col items-center justify-center text-center px-4 py-20 relative">
+            <h1 class="text-5xl md:text-7xl font-extrabold leading-tight mb-6 hero-title">
+                Unleash the Power of <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">Prompt Engineering</span>
+            </h1>
+            <p class="text-lg md:text-xl max-w-3xl mb-10 text-gray-300 hero-subtitle">
+                HIFINFT is at the forefront of generative AI, creating unique and valuable NFTs through advanced prompt engineering. Discover the future of digital art.
+            </p>
+            <button id="mintNowBtn" class="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-bold py-3 px-10 rounded-full text-xl shadow-xl transition-all duration-300 transform hover:scale-105 hero-button">
+                Mint Your NFT Now!
+            </button>
+            <div id="walletStatus" class="mt-4 text-sm text-gray-400">Wallet not connected.</div>
+        </section>
 
-  <section class="slider">
-    <div class="card-container">
-      <div class="card"><img src="assets/nft/1.png" /></div>
-      <div class="card"><img src="assets/nft/2.png" /></div>
-      <div class="card"><img src="assets/nft/3.png" /></div>
-    </div>
-  </section>
+        <!-- About Section -->
+        <section id="about" class="py-20 px-6 md:px-12 bg-black bg-opacity-70 backdrop-blur-sm rounded-lg mx-auto max-w-6xl my-20 shadow-2xl about-section">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">About HIFINFT</h2>
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-6 text-lg text-gray-300">
+                    <p>HIFINFT is pioneering the next generation of digital collectibles by leveraging cutting-edge prompt engineering techniques. Our platform empowers artists and collectors to explore the boundless possibilities of AI-generated art, ensuring each NFT is truly unique and holds intrinsic value.</p>
+                    <p>We believe in the democratization of creativity, providing tools that allow anyone to become a digital art connoisseur. Our community-driven approach fosters innovation and collaboration, pushing the boundaries of what's possible in the NFT space.</p>
+                    <p>Join us on this exciting journey as we redefine ownership and artistic expression in the digital realm. HIFINFT is more than just NFTs; it's a movement towards a more creative and decentralized future.</p>
+                </div>
+                <div class="relative flex justify-center items-center">
+                    <img src="https://placehold.co/500x300/333333/FFFFFF?text=AI+Art+Concept" alt="AI Art Concept" class="w-full h-auto rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300">
+                    <div class="absolute inset-0 bg-gradient-to-br from-purple-500/30 to-pink-500/30 rounded-xl opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <span class="text-white text-2xl font-bold">Innovate. Create. Own.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r148/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="background.js"></script>
-  <script src="script.js"></script>
+        <!-- Collection Section (Animated Cards) -->
+        <section id="collection" class="py-20 px-6 md:px-12 bg-black bg-opacity-70 backdrop-blur-sm rounded-lg mx-auto max-w-6xl my-20 shadow-2xl collection-section">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">Our Exclusive Collection</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- NFT Card 1 -->
+                <div class="nft-card bg-gray-900 rounded-xl overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300 cursor-pointer">
+                    <img src="https://placehold.co/400x300/4F46E5/FFFFFF?text=NFT+001" alt="NFT 001" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-semibold mb-2 text-purple-300">Nebula Bloom</h3>
+                        <p class="text-gray-400 text-sm mb-4">A vibrant fusion of cosmic dust and ethereal flora, generated by advanced prompts.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-bold text-green-400">0.5 ETH</span>
+                            <button class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-2 px-4 rounded-full text-sm">View Details</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- NFT Card 2 -->
+                <div class="nft-card bg-gray-900 rounded-xl overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300 cursor-pointer">
+                    <img src="https://placehold.co/400x300/EC4899/FFFFFF?text=NFT+002" alt="NFT 002" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-semibold mb-2 text-pink-300">Cybernetic Dream</h3>
+                        <p class="text-gray-400 text-sm mb-4">An intricate digital landscape where circuits meet consciousness, a true AI masterpiece.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-bold text-green-400">0.8 ETH</span>
+                            <button class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-2 px-4 rounded-full text-sm">View Details</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- NFT Card 3 -->
+                <div class="nft-card bg-gray-900 rounded-xl overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300 cursor-pointer">
+                    <img src="https://placehold.co/400x300/10B981/FFFFFF?text=NFT+003" alt="NFT 003" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-semibold mb-2 text-green-300">Quantum Echo</h3>
+                        <p class="text-gray-400 text-sm mb-4">Visualizing the ripples of quantum entanglement, a prompt-driven abstract creation.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-bold text-green-400">1.2 ETH</span>
+                            <button class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-2 px-4 rounded-full text-sm">View Details</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- NFT Card 4 -->
+                <div class="nft-card bg-gray-900 rounded-xl overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300 cursor-pointer">
+                    <img src="https://placehold.co/400x300/F59E0B/FFFFFF?text=NFT+004" alt="NFT 004" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-semibold mb-2 text-yellow-300">Solar Flare</h3>
+                        <p class="text-gray-400 text-sm mb-4">Capturing the raw energy of a solar eruption, an intense and dynamic piece.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-bold text-green-400">0.7 ETH</span>
+                            <button class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-2 px-4 rounded-full text-sm">View Details</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- NFT Card 5 -->
+                <div class="nft-card bg-gray-900 rounded-xl overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300 cursor-pointer">
+                    <img src="https://placehold.co/400x300/6366F1/FFFFFF?text=NFT+005" alt="NFT 005" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-semibold mb-2 text-indigo-300">Digital Genesis</h3>
+                        <p class="text-gray-400 text-sm mb-4">The birth of a digital universe, a foundational piece exploring creation.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-bold text-green-400">0.9 ETH</span>
+                            <button class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-2 px-4 rounded-full text-sm">View Details</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- NFT Card 6 -->
+                <div class="nft-card bg-gray-900 rounded-xl overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300 cursor-pointer">
+                    <img src="https://placehold.co/400x300/EF4444/FFFFFF?text=NFT+006" alt="NFT 006" class="w-full h-64 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-semibold mb-2 text-red-300">Abstract Anomaly</h3>
+                        <p class="text-gray-400 text-sm mb-4">A study in controlled chaos, where AI interprets the unpredictable.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-lg font-bold text-green-400">0.6 ETH</span>
+                            <button class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-2 px-4 rounded-full text-sm">View Details</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Roadmap Section -->
+        <section id="roadmap" class="py-20 px-6 md:px-12 bg-black bg-opacity-70 backdrop-blur-sm rounded-lg mx-auto max-w-6xl my-20 shadow-2xl roadmap-section">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">Our Journey: Roadmap</h2>
+            <div class="relative">
+                <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gradient-to-b from-purple-500 to-pink-500 rounded-full hidden md:block"></div>
+                <div class="space-y-16">
+                    <!-- Roadmap Item 1 -->
+                    <div class="flex flex-col md:flex-row items-center md:justify-between roadmap-item">
+                        <div class="md:w-5/12 text-right p-4 rounded-lg bg-gray-900 shadow-xl border border-purple-700">
+                            <h3 class="text-3xl font-semibold text-purple-400 mb-2">Q4 2024 - Foundation & Launch</h3>
+                            <ul class="list-disc list-inside text-gray-300 space-y-2">
+                                <li>Platform development & smart contract deployment.</li>
+                                <li>Initial NFT collection release (Genesis Series).</li>
+                                <li>Community building & marketing campaigns.</li>
+                            </ul>
+                        </div>
+                        <div class="md:w-1/12 flex justify-center py-4 md:py-0">
+                            <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">1</div>
+                        </div>
+                        <div class="md:w-5/12 p-4 hidden md:block"></div>
+                    </div>
+                    <!-- Roadmap Item 2 -->
+                    <div class="flex flex-col md:flex-row items-center md:justify-between roadmap-item">
+                        <div class="md:w-5/12 p-4 hidden md:block"></div>
+                        <div class="md:w-1/12 flex justify-center py-4 md:py-0">
+                            <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">2</div>
+                        </div>
+                        <div class="md:w-5/12 text-left p-4 rounded-lg bg-gray-900 shadow-xl border border-pink-700">
+                            <h3 class="text-3xl font-semibold text-pink-400 mb-2">Q1 2025 - Expansion & Features</h3>
+                            <ul class="list-disc list-inside text-gray-300 space-y-2">
+                                <li>Introduction of AI-assisted minting tools for users.</li>
+                                <li>Partnerships with prominent AI artists.</li>
+                                <li>Staking mechanisms for NFT holders.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Roadmap Item 3 -->
+                    <div class="flex flex-col md:flex-row items-center md:justify-between roadmap-item">
+                        <div class="md:w-5/12 text-right p-4 rounded-lg bg-gray-900 shadow-xl border border-purple-700">
+                            <h3 class="text-3xl font-semibold text-purple-400 mb-2">Q2 2025 - Metaverse Integration</h3>
+                            <ul class="list-disc list-inside text-gray-300 space-y-2">
+                                <li>Integration with leading metaverse platforms.</li>
+                                <li>Development of interactive NFT experiences.</li>
+                                <li>Launch of HIFINFT DAO for community governance.</li>
+                            </ul>
+                        </div>
+                        <div class="md:w-1/12 flex justify-center py-4 md:py-0">
+                            <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">3</div>
+                        </div>
+                        <div class="md:w-5/12 p-4 hidden md:block"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-20 px-6 md:px-12 bg-black bg-opacity-70 backdrop-blur-sm rounded-lg mx-auto max-w-6xl my-20 shadow-2xl contact-section">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Get in Touch</h2>
+            <div class="max-w-2xl mx-auto text-center">
+                <p class="text-lg text-gray-300 mb-8">Have questions, suggestions, or just want to say hello? Reach out to us!</p>
+                <form class="space-y-6">
+                    <div>
+                        <input type="text" placeholder="Your Name" class="w-full p-4 rounded-lg bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 text-white placeholder-gray-400">
+                    </div>
+                    <div>
+                        <input type="email" placeholder="Your Email" class="w-full p-4 rounded-lg bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 text-white placeholder-gray-400">
+                    </div>
+                    <div>
+                        <textarea placeholder="Your Message" rows="6" class="w-full p-4 rounded-lg bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 text-white placeholder-gray-400"></textarea>
+                    </div>
+                    <button type="submit" class="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 px-8 rounded-full text-lg shadow-lg transition-all duration-300 transform hover:scale-105">
+                        Send Message
+                    </button>
+                </form>
+                <div class="mt-10 flex justify-center space-x-6 text-3xl">
+                    <a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300"><i class="fab fa-discord"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-purple-400 transition-colors duration-300"><i class="fab fa-telegram-plane"></i></a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-8 text-center text-gray-500 border-t border-gray-800">
+        &copy; 2025 HIFINFT. All rights reserved.
+    </footer>
+
+    <!-- GSAP and Three.js Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.9.1/ScrollToPlugin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="script.js"></script>
 </body>
 </html>
